@@ -1,0 +1,53 @@
+package main
+
+import (
+	"fmt"
+	"regexp"
+	"github.com/acomagu/chatroom-go/chatroom"
+)
+
+var topics = []chatroom.Topic{excludeTraitor}
+
+var laws = []*regexp.Regexp{
+	regexp.MustCompile(`すっ?ごーい`),
+	regexp.MustCompile(`たー?のしー`),
+	regexp.MustCompile(`わーい`),
+	regexp.MustCompile(`へーきへーき`),
+	regexp.MustCompile(`[^!！。、]+が(苦手|にがて)なフレンズなんだね`),
+	regexp.MustCompile(`[^!！。、]+が(得意|とくい)なフレンズなんだね`),
+	regexp.MustCompile(`フレンズによって(得意|とくい)なこと(違|ちが)うから`),
+	regexp.MustCompile(`うわー`),
+	regexp.MustCompile(`なにこれなにこれ`),
+	regexp.MustCompile(`おもしろーい`),
+}
+
+func excludeTraitor(room chatroom.Room) chatroom.DidTalk {
+	r := waitReceived(room)
+	if isLegal(r.text) {
+		return false
+	}
+	_, _, err := api.DeleteMessage(r.channelID, r.timestamp)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return true
+}
+
+func isLegal(msg string) bool {
+	removes := regexp.MustCompile(`(\s|\t|\n|!|！)`)
+	msg = removes.ReplaceAllString(msg, "")
+
+	for _, law := range laws {
+		msg = law.ReplaceAllString(msg, "")
+	}
+	return msg == ""
+}
+
+func waitReceived(room chatroom.Room) received {
+	for {
+		msg := room.WaitMsg()
+		if r, ok := msg.(received); ok {
+			return r
+		}
+	}
+}
