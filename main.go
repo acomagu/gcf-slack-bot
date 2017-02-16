@@ -27,6 +27,7 @@ type received struct {
 	timestamp string
 	userName string
 	channelID string
+	channelName string
 }
 
 func main() {
@@ -65,5 +66,6 @@ func parseOutgoingWebhookQuery(body []byte) received {
 		timestamp: parsed["timestamp"][0],
 		userName: parsed["user_name"][0],
 		channelID: parsed["channel_id"][0],
+		channelName: parsed["channel_name"][0],
 	}
 }

@@ -20,7 +20,7 @@ var laws = []*regexp.Regexp{
 
 func kemonoPoliceTopic(room chatroom.Room) chatroom.DidTalk {
 	r := waitReceived(room)
-	if isLegal(r.text) {
+	if r.channelName != "kemono" || isLegal(r.text) {
 		return false
 	}
 	_, _, err := api.DeleteMessage(r.channelID, r.timestamp)
