@@ -4,7 +4,7 @@ import (
 	"github.com/acomagu/chatroom-go/chatroom"
 )
 
-var topics = []chatroom.Topic{kemonoPoliceTopic}
+var topics = []chatroom.Topic{kemonoPoliceTopic, kemonoReactionTopic}
 
 func waitReceived(room chatroom.Room) received {
 	for {
