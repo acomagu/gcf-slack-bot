@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"regexp"
 	"github.com/acomagu/chatroom-go/chatroom"
+	"regexp"
 )
 
 var laws = []*regexp.Regexp{
@@ -18,9 +18,9 @@ var laws = []*regexp.Regexp{
 	regexp.MustCompile(`おもしろーい`),
 }
 
-func kemonoPolice(room chatroom.Room) chatroom.DidTalk {
+func kemonoPoliceTopic(room chatroom.Room) chatroom.DidTalk {
 	r := waitReceived(room)
-	if isLegal(r.text) {
+	if r.channelName != "kemono" || isLegal(r.text) {
 		return false
 	}
 	_, _, err := api.DeleteMessage(r.channelID, r.timestamp)
@@ -38,13 +38,4 @@ func isLegal(msg string) bool {
 		msg = law.ReplaceAllString(msg, "")
 	}
 	return msg == ""
-}
-
-func waitReceived(room chatroom.Room) received {
-	for {
-		msg := room.WaitMsg()
-		if r, ok := msg.(received); ok {
-			return r
-		}
-	}
 }
