@@ -39,12 +39,3 @@ func isLegal(msg string) bool {
 	}
 	return msg == ""
 }
-
-func waitReceived(room chatroom.Room) received {
-	for {
-		msg := room.WaitMsg()
-		if r, ok := msg.(received); ok {
-			return r
-		}
-	}
-}
