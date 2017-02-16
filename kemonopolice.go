@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"regexp"
 	"github.com/acomagu/chatroom-go/chatroom"
+	"regexp"
 )
 
 var laws = []*regexp.Regexp{

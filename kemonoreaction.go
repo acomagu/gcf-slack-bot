@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"regexp"
 	"github.com/acomagu/chatroom-go/chatroom"
 	"github.com/nlopes/slack"
+	"regexp"
 )
 
 var kemonoWords = []*regexp.Regexp{
@@ -24,7 +24,7 @@ func kemonoReactionTopic(room chatroom.Room) chatroom.DidTalk {
 		return false
 	}
 	theItem := slack.ItemRef{
-		Channel: r.channelID,
+		Channel:   r.channelID,
 		Timestamp: r.timestamp,
 	}
 	err := api.AddReaction("kemono_friends", theItem)
