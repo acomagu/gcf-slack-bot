@@ -18,7 +18,7 @@ var laws = []*regexp.Regexp{
 	regexp.MustCompile(`おもしろーい`),
 }
 
-func kemonoPolice(room chatroom.Room) chatroom.DidTalk {
+func kemonoPoliceTopic(room chatroom.Room) chatroom.DidTalk {
 	r := waitReceived(room)
 	if isLegal(r.text) {
 		return false

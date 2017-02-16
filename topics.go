@@ -4,4 +4,4 @@ import (
 	"github.com/acomagu/chatroom-go/chatroom"
 )
 
-var topics = []chatroom.Topic{kemonoPolice}
+var topics = []chatroom.Topic{kemonoPoliceTopic}
