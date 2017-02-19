@@ -30,9 +30,9 @@ type received struct {
 	channelName string
 }
 
-func main() {
-	cr := chatroom.New(topics)
+var crs = make(map[string]chatroom.Chatroom)
 
+func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -41,6 +41,11 @@ func main() {
 		riv := parseOutgoingWebhookQuery(body)
 		if riv.userName == "slackbot" {
 			return
+		}
+		cr, ok := crs[riv.channelID]
+		if !ok {
+			cr = chatroom.New(topics)
+			crs[riv.channelID] = cr
 		}
 		// Pass the received message to Chatroom.
 		cr.Flush(riv)
