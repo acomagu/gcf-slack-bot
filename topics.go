@@ -1,10 +1,11 @@
 package main
 
 import (
+	"regexp"
 	"github.com/acomagu/chatroom-go/chatroom"
 )
 
-var topics = []chatroom.Topic{kemonoPoliceTopic, kemonoReactionTopic}
+var topics = []chatroom.Topic{kemonoPoliceTopic, kemonoReactionTopic, suggestRestaurant}
 
 func waitReceived(room chatroom.Room) received {
 	for {
@@ -13,4 +14,13 @@ func waitReceived(room chatroom.Room) received {
 			return r
 		}
 	}
+}
+
+func matchAny(regexps []*regexp.Regexp, str string) bool {
+	for _, exp := range regexps {
+		if exp.MatchString(str) {
+			return true
+		}
+	}
+	return false
 }

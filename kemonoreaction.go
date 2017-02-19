@@ -35,10 +35,5 @@ func kemonoReactionTopic(room chatroom.Room) chatroom.DidTalk {
 }
 
 func doesIncludeKemonoWords(msg string) bool {
-	for _, kemonoWord := range kemonoWords {
-		if kemonoWord.MatchString(msg) {
-			return true
-		}
-	}
-	return false
+	return matchAny(kemonoWords, msg)
 }
