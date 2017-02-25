@@ -1,12 +1,19 @@
-package main
+package restaurants
 
 import (
 	"math/rand"
 	"regexp"
 	"github.com/acomagu/chatroom-go/chatroom"
+	"github.com/nlopes/slack"
+	"github.com/acomagu/gcf-slack-bot/topicutil"
 )
 
 type isAccepted bool
+
+// Client is restaurants slack client struct
+type Client struct {
+	bot *slack.Client
+}
 
 var mealTrigger = regexp.MustCompile("(めし|飯|ごはん|ご飯)ルーレット")
 var majorRestaurasts = []string{
@@ -57,21 +64,29 @@ var negativeReacts = []*regexp.Regexp{
 	regexp.MustCompile(`無理`),
 }
 
-func suggestRestaurant(room chatroom.Room) chatroom.DidTalk {
-	r := waitReceived(room)
-	if !mealTrigger.MatchString(r.text) {
+// New creates new Client.
+func New(bot *slack.Client) Client {
+	return Client{
+		bot: bot,
+	}
+}
+
+// Talk is main Topic
+func (client Client) Talk(room chatroom.Room) chatroom.DidTalk {
+	r := topicutil.WaitReceived(room)
+	if !mealTrigger.MatchString(r.Text) {
 		return false
 	}
 
 	for {
-		postToSlack("今日のごはんは...")
+		room.Send("今日のごはんは...")
 		if isTodayMajor() {
-			postToSlack("じゃーん! *" + todaysMajorRestaurant() + "*!")
+			room.Send("じゃーん! *" + todaysMajorRestaurant() + "*!")
 			if majorReact(room) {
 				return true
 			}
 		} else {
-			postToSlack("じゃーん! *" + todaysMinorRestaurant() + "*!")
+			room.Send("じゃーん! *" + todaysMinorRestaurant() + "*!")
 			if minorReact(room) {
 				return true
 			}
@@ -80,16 +95,16 @@ func suggestRestaurant(room chatroom.Room) chatroom.DidTalk {
 }
 
 func majorReact(room chatroom.Room) isAccepted {
-	r := waitReceived(room)
-	if isPositiveReaction(r.text) {
-		postToSlack(choose([]string{
+	r := topicutil.WaitReceived(room)
+	if isPositiveReaction(r.Text) {
+		room.Send(choose([]string{
 			"ありがとう!",
 			"いいでしょ!",
 			"すごーい!",
 		}))
 		return true
-	} else if isNegativeReaction(r.text) {
-		postToSlack(choose([]string{
+	} else if isNegativeReaction(r.Text) {
+		room.Send(choose([]string{
 			"はぁ!? きれそう",
 			"もう疲れたよ...",
 			"お気に召さなかったですか...? もう一度やらせてください!",
@@ -103,23 +118,23 @@ func majorReact(room chatroom.Room) isAccepted {
 }
 
 func minorReact(room chatroom.Room) isAccepted {
-	r := waitReceived(room)
-	if isPositiveReaction(r.text) {
-		postToSlack(choose([]string{"え...ひくわ...", "まじか...", "(まじか...)", "ふーん?", "すごい...ね?", "へぇ...そういうのが好きなの?"}))
+	r := topicutil.WaitReceived(room)
+	if isPositiveReaction(r.Text) {
+		room.Send(choose([]string{"え...ひくわ...", "まじか...", "(まじか...)", "ふーん?", "すごい...ね?", "へぇ...そういうのが好きなの?"}))
 		return true
-	} else if isNegativeReaction(r.text) {
-		postToSlack(choose([]string{"贅沢だな! もう...", "ふふ...もう、しかたないなぁ", "贅沢言わないでくれる? はぁ..."}))
+	} else if isNegativeReaction(r.Text) {
+		room.Send(choose([]string{"贅沢だな! もう...", "ふふ...もう、しかたないなぁ", "贅沢言わないでくれる? はぁ..."}))
 		return false
 	}
 	return true
 }
 
 func isNegativeReaction(str string) bool {
-	return matchAny(negativeReacts, str)
+	return topicutil.MatchAny(negativeReacts, str)
 }
 
 func isPositiveReaction(str string) bool {
-	return matchAny(positiveReacts, str)
+	return topicutil.MatchAny(positiveReacts, str)
 }
 
 func isTodayMajor() bool {
