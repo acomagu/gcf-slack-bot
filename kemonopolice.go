@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/nlopes/slack"
 	"github.com/acomagu/chatroom-go/chatroom"
+	"github.com/acomagu/gcf-slack-bot/topicutil"
 	"regexp"
 )
 
@@ -18,12 +20,25 @@ var laws = []*regexp.Regexp{
 	regexp.MustCompile(`おもしろーい`),
 }
 
-func kemonoPoliceTopic(room chatroom.Room) chatroom.DidTalk {
-	r := waitReceived(room)
-	if r.channelName != "kemono" || isLegal(r.text) {
+// Client keeps slack client to delete other's message.
+type Client struct {
+	bot *slack.Client
+}
+
+// New creates new Client.
+func New(bot *slack.Client) Client {
+	return Client{
+		bot: bot,
+	}
+}
+
+// Talk is main Topic
+func (client Client) Talk(room chatroom.Room) chatroom.DidTalk {
+	r := topicutil.WaitReceived(room)
+	if r.ChannelName != "kemono" || isLegal(r.Text) {
 		return false
 	}
-	_, _, err := api.DeleteMessage(r.channelID, r.timestamp)
+	_, _, err := client.bot.DeleteMessage(r.ChannelID, r.Timestamp)
 	if err != nil {
 		fmt.Println(err)
 	}

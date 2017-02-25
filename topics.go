@@ -2,15 +2,13 @@ package main
 
 import (
 	"github.com/acomagu/chatroom-go/chatroom"
+	"github.com/acomagu/gcf-slack-bot/slackcr"
+	"github.com/acomagu/gcf-slack-bot/restaurants"
+	"github.com/acomagu/gcf-slack-bot/kmnreact"
 )
 
-var topics = []chatroom.Topic{kemonoPoliceTopic, kemonoReactionTopic}
-
-func waitReceived(room chatroom.Room) received {
-	for {
-		msg := room.WaitMsg()
-		if r, ok := msg.(received); ok {
-			return r
-		}
-	}
+func topics(clients slackcr.SlackClients) []chatroom.Topic {
+	rests := restaurants.New(clients.Friends)
+	react := kmnreact.New(clients.God)
+	return []chatroom.Topic{rests.Talk, react.Talk}
 }

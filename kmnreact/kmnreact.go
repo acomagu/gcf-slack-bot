@@ -1,8 +1,9 @@
-package main
+package kmnreact
 
 import (
 	"fmt"
 	"github.com/acomagu/chatroom-go/chatroom"
+	"github.com/acomagu/gcf-slack-bot/topicutil"
 	"github.com/nlopes/slack"
 	"regexp"
 )
@@ -18,16 +19,29 @@ var kemonoWords = []*regexp.Regexp{
 	regexp.MustCompile(`おもしろーい`),
 }
 
-func kemonoReactionTopic(room chatroom.Room) chatroom.DidTalk {
-	r := waitReceived(room)
-	if r.channelName == "kemono" || !doesIncludeKemonoWords(r.text) {
+// Client keeps slack client to delete other's message.
+type Client struct {
+	bot *slack.Client
+}
+
+// New creates new Client.
+func New(bot *slack.Client) Client {
+	return Client{
+		bot: bot,
+	}
+}
+
+// Talk is main Topic.
+func (client Client) Talk(room chatroom.Room) chatroom.DidTalk {
+	r := topicutil.WaitReceived(room)
+	if r.ChannelName == "kemono" || !doesIncludeKemonoWords(r.Text) {
 		return false
 	}
 	theItem := slack.ItemRef{
-		Channel:   r.channelID,
-		Timestamp: r.timestamp,
+		Channel:   r.ChannelID,
+		Timestamp: r.Timestamp,
 	}
-	err := api.AddReaction("kemono_friends", theItem)
+	err := client.bot.AddReaction("kemono_friends", theItem)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -35,10 +49,5 @@ func kemonoReactionTopic(room chatroom.Room) chatroom.DidTalk {
 }
 
 func doesIncludeKemonoWords(msg string) bool {
-	for _, kemonoWord := range kemonoWords {
-		if kemonoWord.MatchString(msg) {
-			return true
-		}
-	}
-	return false
+	return topicutil.MatchAny(kemonoWords, msg)
 }
