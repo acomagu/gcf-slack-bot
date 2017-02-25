@@ -89,7 +89,7 @@ func (client *Client) Listen(port string) {
 func (client *Client) sender(channelID string) {
 	cr, ok := crs[channelID]
 	if !ok {
-		fmt.Println("ERR: the chatroom is not found. It's must be.")
+		fmt.Println("ERR: the chatroom is not found. It must be.")
 		return
 	}
 	for {
