@@ -2,6 +2,7 @@ package restaurants
 
 import (
 	"math/rand"
+	"time"
 	"regexp"
 	"github.com/acomagu/chatroom-go/chatroom"
 	"github.com/nlopes/slack"
@@ -73,6 +74,7 @@ func New(bot *slack.Client) Client {
 
 // Talk is main Topic
 func (client Client) Talk(room chatroom.Room) chatroom.DidTalk {
+	rand.Seed(time.Now().Unix())
 	r := topicutil.WaitReceived(room)
 	if !mealTrigger.MatchString(r.Text) {
 		return false
