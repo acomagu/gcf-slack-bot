@@ -19,7 +19,7 @@ func (Client) Talk(room chatroom.Room) chatroom.DidTalk {
 		return false
 	}
 
-	room.Send(`　　　　 ,、,,,、,,, 
+	room.Send("```\n" + `　　　　 ,、,,,、,,, 
 　　　 _,,;' '" '' ;;,, 
 　　（rヽ,;''""''゛゛;,ﾉｒ）　　　　 
 　　 ,; i ___　、___iヽ゛;,　　テスト書いてないとかお前それ@t_wadaの前でも同じ事言えんの？
@@ -34,6 +34,6 @@ func (Client) Talk(room chatroom.Room) chatroom.DidTalk {
 （ヽ  _____________ ,, ＿´） 
  （_⌒_______________ ,, ィ 
      T                 |
-     |                 |`)
+     |                 |` + "\n```")
 	return true
 }
