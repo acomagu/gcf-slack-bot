@@ -1,9 +1,9 @@
 package topicutil
 
 import (
-	"regexp"
 	"github.com/acomagu/chatroom-go/chatroom"
 	"github.com/acomagu/gcf-slack-bot/slackcr"
+	"regexp"
 )
 
 // WaitReceived is wrap of chatroom.Room.WaitMsg. Type annotacing for slackcr.Received type and returns it.

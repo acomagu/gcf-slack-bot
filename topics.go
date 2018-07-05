@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/acomagu/chatroom-go/chatroom"
-	"github.com/acomagu/gcf-slack-bot/slackcr"
-	"github.com/acomagu/gcf-slack-bot/restaurants"
 	"github.com/acomagu/gcf-slack-bot/kmnreact"
 	"github.com/acomagu/gcf-slack-bot/nanhankanmu"
+	"github.com/acomagu/gcf-slack-bot/restaurants"
+	"github.com/acomagu/gcf-slack-bot/slackcr"
 	"github.com/acomagu/gcf-slack-bot/twada"
 )
 
