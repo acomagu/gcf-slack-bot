@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/nlopes/slack"
 	"github.com/acomagu/chatroom-go/chatroom"
 	"github.com/acomagu/gcf-slack-bot/topicutil"
+	"github.com/nlopes/slack"
 	"regexp"
 )
 

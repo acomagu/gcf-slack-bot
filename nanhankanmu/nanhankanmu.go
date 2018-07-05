@@ -9,7 +9,7 @@ import (
 var trigger = regexp.MustCompile(`3[^\w]*3[^\w]*4`)
 
 // Client keeps slack client to delete other's message.
-type Client struct {}
+type Client struct{}
 
 // Talk is main Topic
 func (Client) Talk(room chatroom.Room) chatroom.DidTalk {

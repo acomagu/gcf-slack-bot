@@ -13,20 +13,20 @@ import (
 // SlackClients have all of client for Slack.
 type SlackClients struct {
 	Friends *slack.Client
-	God *slack.Client
+	God     *slack.Client
 }
 
 // Client keeps the clients for Slack Bot and methods to operate them.
 type Client struct {
 	slackClients SlackClients
-	topics []chatroom.Topic
+	topics       []chatroom.Topic
 }
 
 // NewSlackClients cretes SlackClients
 func NewSlackClients(botAPIToken string, godBotAPIToken string) SlackClients {
 	return SlackClients{
 		Friends: slack.New(botAPIToken),
-		God: slack.New(godBotAPIToken),
+		God:     slack.New(godBotAPIToken),
 	}
 }
 
@@ -34,7 +34,7 @@ func NewSlackClients(botAPIToken string, godBotAPIToken string) SlackClients {
 func New(slackClients SlackClients, topics []chatroom.Topic) Client {
 	return Client{
 		slackClients: slackClients,
-		topics: topics,
+		topics:       topics,
 	}
 }
 
@@ -49,13 +49,13 @@ type Received struct {
 
 // BotProfile express the name and icon(Emoji) of one Bot.
 type BotProfile struct {
-	UserName string
+	UserName  string
 	IconEmoji string
 }
 
 var botProfiles = []BotProfile{
 	BotProfile{
-		UserName: "God",
+		UserName:  "God",
 		IconEmoji: ":god:",
 	},
 }

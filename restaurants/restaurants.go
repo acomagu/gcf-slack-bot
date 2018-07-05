@@ -1,12 +1,12 @@
 package restaurants
 
 import (
-	"math/rand"
-	"time"
-	"regexp"
 	"github.com/acomagu/chatroom-go/chatroom"
-	"github.com/nlopes/slack"
 	"github.com/acomagu/gcf-slack-bot/topicutil"
+	"github.com/nlopes/slack"
+	"math/rand"
+	"regexp"
+	"time"
 )
 
 type isAccepted bool
